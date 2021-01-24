@@ -1,0 +1,29 @@
+# Ignore the deps and obj files
+*.o
+*.d
+.clangd/
+compile_commands.json
+
+# Ignore the binaries
+r-type_client
+r-type_server
+
+# Ignore the CMake build file
+CMakeFiles
+CMakeCache.txt
+*.cmake
+Makefile
+
+# Ignore the build directory
+build/
+cmake-build-*
+
+# Ignore JetBrains IDE files
+.idea
+
+# Ignore doc
+doc
+
+# Run scripts
+run.bat
+run.sh

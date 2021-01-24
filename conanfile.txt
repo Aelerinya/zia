@@ -1,0 +1,12 @@
+[requires]
+boost/1.74.0
+openssl/1.0.2s
+
+[generators]
+cmake
+
+# If we want the executable to work on windows too, we need to copy libs in binary directory
+[imports]
+bin, *.dll -> ./bin
+lib, *.dylib* -> ./bin
+lib, *.lib* -> ./bin    # Because Boost .lib are dynamically linked
