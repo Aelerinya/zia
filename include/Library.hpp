@@ -24,7 +24,10 @@ class Library
 public:
     Library(std::string path): _path(path), _ptr(nullptr), obj(nullptr)
     {
-        _ptr = std::shared_ptr<void>(dlopen(path.c_str(), RTLD_LAZY), dlclose);
+        auto dlclose_deleter = [](void *ptr) {
+            if (ptr) dlclose(ptr);
+        };
+        _ptr = std::shared_ptr<void>(dlopen(path.c_str(), RTLD_LAZY), dlclose_deleter);
         if (!_ptr) { throw LibraryErr("unable to open .so"); }
         T *(*symb)(void) = (T * (*)(void)) dlsym(_ptr.get(), "entrypoint");
         if (symb == 0x0) { throw LibraryErr("missing symbols"); }
