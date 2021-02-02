@@ -14,6 +14,7 @@ conan_basic_setup(TARGETS)
 
 # link_libraries(${CONAN_LIBS})
 include_directories(./include/)
+include_directories(./interface/)
 
 set(CMAKE_BUILD_TYPE Release)
 
@@ -22,3 +23,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(zia source/main.cpp)
 target_link_libraries(zia CONAN_PKG::boost)
+target_link_libraries(zia dl)
