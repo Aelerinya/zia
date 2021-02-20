@@ -1,3 +1,6 @@
+#ifndef ZIA_MODULE_API_H_
+#define ZIA_MODULE_API_H_
+
 #include <deque>
 #include <memory>
 #include <string>
@@ -14,7 +17,7 @@ namespace zia::api
 {
 class IModule
 {
-  public:
+public:
     virtual ~IModule(){};
 
     virtual const std::string &getName() const = 0;
@@ -22,4 +25,6 @@ class IModule
 };
 
 extern "C" std::unique_ptr<IModule> load_module(IZiaInitializer &);
-} // namespace zia::api
+}    // namespace zia::api
+
+#endif

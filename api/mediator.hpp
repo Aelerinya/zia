@@ -1,3 +1,6 @@
+#ifndef ZIA_MEDIATOR_API_H_
+#define ZIA_MEDIATOR_API_H_
+
 #include <deque>
 #include <string>
 
@@ -16,3 +19,5 @@ class IZiaMediator
 };
 
 } // namespace zia::api
+
+#endif

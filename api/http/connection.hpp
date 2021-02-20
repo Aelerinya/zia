@@ -1,3 +1,6 @@
+#ifndef ZIA_HTTP_CONNECTION_API_H_
+#define ZIA_HTTP_CONNECTION_API_H_
+
 #include "../event.hpp"
 #include <cstdint>
 #include <string>
@@ -23,3 +26,5 @@ inline const EventDescriptor &NewHTTPConnectionEvent::getDescriptor() const
 }
 
 } // namespace zia::api
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef ZIA_INITIALIZER_API_H_
+#define ZIA_INITIALIZER_API_H_
+
 #include "event.hpp"
 
 namespace zia::api
@@ -14,3 +17,5 @@ class IZiaInitializer
                                   EventListener listener) = 0;
 };
 } // namespace zia::api
+
+#endif

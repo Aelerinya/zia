@@ -1,7 +1,8 @@
-#ifndef ZIA_RESPONSE_H_
-#define ZIA_RESPONSE_H_
+#ifndef ZIA_HTTP_RESPONSE_API_H_
+#define ZIA_HTTP_RESPONSE_API_H_
 
 #include "../event.hpp"
+#include <string>
 
 namespace zia::api
 {
@@ -14,7 +15,7 @@ struct HTTPResponse {
 
 class NewHTTPResponse : public IEvent
 {
-    virtual const HTTPResponse &getResponse = 0;
+    virtual const HTTPResponse &getResponse() const = 0;
 };
 } // namespace zia::api
-#endif // ZIA_RESPONSE_H_
+#endif // ZIA_HTTP_RESPONSE_API_H_

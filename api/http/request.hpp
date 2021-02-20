@@ -1,5 +1,5 @@
-#ifndef ZIA_REQUEST_H_
-#define ZIA_REQUEST_H_
+#ifndef ZIA_HTTP_REQUEST_API_H_
+#define ZIA_HTTP_REQUEST_API_H_
 
 #include "../event.hpp"
 #include <string>
@@ -30,7 +30,7 @@ struct HTTPRequest {
 class NewHTTPRequest : public IEvent
 {
   public:
-    virtual const HTTPRequest &getMessage() = 0;
+    virtual const HTTPRequest &getRequest() = 0;
 };
 } // namespace zia::api::http
-#endif // ZIA_REQUEST_H_
+#endif // ZIA_HTTP_REQUEST_API_H_

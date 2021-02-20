@@ -1,8 +1,8 @@
-#ifndef ZIA_ROUTING_H_
-#define ZIA_ROUTING_H_
+#ifndef ZIA_HTTP_ROUTING_API_H_
+#define ZIA_HTTP_ROUTING_API_H_
 
 #include "../event.hpp"
-#include "message.hpp"
+#include "request.hpp"
 
 namespace zia::api::http
 {
@@ -15,9 +15,9 @@ struct Route {
 class RouteRequestEvent
 {
     virtual const Route &getRoute() = 0;
-    virtual const HTTPMessage &getMessage() = 0;
+    virtual const HTTPRequest &getRequest() = 0;
 
     virtual void routeNext() = 0;
 };
 } // namespace zia::api::http
-#endif // ZIA_ROUTING_H_
+#endif // ZIA_HTTP_ROUTING_API_H_

@@ -1,5 +1,5 @@
-#ifndef ZIA_EVENT_H_
-#define ZIA_EVENT_H_
+#ifndef ZIA_API_EVENT_H_
+#define ZIA_API_EVENT_H_
 
 #include <functional>
 #include <string_view>
@@ -29,4 +29,4 @@ using EventListener = std::function<void(const IZiaMediator &, const IEvent &)>;
 
 } // namespace zia::api
 
-#endif // ZIA_EVENT_H_
+#endif // ZIA_API_EVENT_H_
