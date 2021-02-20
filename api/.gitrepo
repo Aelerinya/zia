@@ -4,7 +4,7 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = https://github.com/Ersikan/zia-api
+	remote = git@github.com:Ersikan/zia-api.git
 	branch = main
 	commit = 38c4b80694653cf5094d6083f4ee258d0824e2b7
 	parent = 76074523a54d8086ade6495ca4698235379cd153
