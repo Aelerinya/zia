@@ -14,7 +14,7 @@ conan_basic_setup(TARGETS)
 
 # link_libraries(${CONAN_LIBS})
 include_directories(./include/)
-include_directories(./interface/)
+include_directories(./api/)
 
 set(CMAKE_BUILD_TYPE Release)
 
