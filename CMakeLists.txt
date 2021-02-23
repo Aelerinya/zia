@@ -25,3 +25,4 @@ add_executable(zia source/main.cpp)
 target_link_libraries(zia CONAN_PKG::boost)
 target_link_libraries(zia dl)
 
+add_subdirectory(module/server/)
