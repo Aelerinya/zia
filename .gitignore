@@ -11,6 +11,7 @@ r-type_server
 # Ignore the CMake build file
 CMakeFiles
 CMakeCache.txt
+.ccls-cache/*
 *.cmake
 Makefile
 .cache/*

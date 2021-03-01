@@ -5,15 +5,21 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <boost/asio.hpp>
 
 namespace zia::api
 {
 
 class NewHTTPConnectionEvent : public IEvent
 {
+public:
+    NewHTTPConnectionEvent(boost::asio::io_context &ic, boost::asio::ip::tcp::socket s):
+        IEvent(), socket(std::move(s)), context(ic)
+    {}
     // static inline const EventDescriptor event =
     // event_base<NewConnectionEvent, NewConnectionEvent::event_name>;
-    // TODO: mettre les trucs de asio
+    boost::asio::ip::tcp::socket socket;
+    std::reference_wrapper<boost::asio::io_context> context;
     const EventDescriptor &getDescriptor() const override;
 };
 
