@@ -24,9 +24,11 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+enable_testing()
 
 add_subdirectory(source)
 add_subdirectory(module)
+add_subdirectory(tests)
 
 add_executable(zia source/main.cpp)
 
