@@ -1,7 +1,7 @@
 #ifndef ZIA_MEDIATOR_API_H_
 #define ZIA_MEDIATOR_API_H_
 
-#include <deque>
+#include <memory>
 #include <string>
 
 #include "event.hpp"
@@ -14,8 +14,7 @@ class IZiaMediator
   public:
     virtual ~IZiaMediator(){};
 
-    virtual void emit(const IEvent &) = 0;
-    std::deque<std::string> getEventList();
+    virtual void emit(std::unique_ptr<IEvent>) = 0;
 };
 
 } // namespace zia::api

@@ -9,8 +9,8 @@ namespace zia::api
 {
 struct EventDescriptor {
     std::string_view name;
-    std::string_view id;
 };
+
 class IEvent
 {
   public:
@@ -19,8 +19,8 @@ class IEvent
     virtual const EventDescriptor &getDescriptor() const = 0;
 };
 
-template <typename T, auto name = "Unknown event">
-const EventDescriptor event_base{name, typeid(T).name()};
+template <std::derived_from<IEvent> T>
+constexpr EventDescriptor event_descriptor;
 
 class IZiaMediator;
 
