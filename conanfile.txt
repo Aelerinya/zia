@@ -1,6 +1,7 @@
 [requires]
 boost/1.74.0
 openssl/1.0.2s
+yaml-cpp/0.6.3
 
 [generators]
 cmake
