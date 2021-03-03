@@ -20,7 +20,7 @@ void Server::configureModule(const YAML::Node &) {}
 extern "C" std::unique_ptr<zia::api::IModule> zia::api::load_module(zia::api::IZiaInitializer &init) {
     auto serv = std::make_unique<Server>();
     auto onStart = zia::api::OnStartEvent();
-    init.registerConsumer(onStart.getDescriptor(), [&serv](zia::api::IZiaMediator &m, const IEvent &) {
+    init.registerConsumer(onStart.getDescriptor(), [&serv](zia::api::IZiaMediator &m, std::unique_ptr<IEvent>) {
         serv->init(m);
     });
     return std::move(serv);

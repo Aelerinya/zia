@@ -28,7 +28,7 @@ load_module([[maybe_unused]] api::IZiaInitializer &initializer)
                                      std::clog << "Listener called" << std::endl;
                                  });
     initializer.registerConsumer(api::event_descriptor<test::Event>,
-                                 [](api::IZiaMediator &mediator, const api::IEvent &) {
+                                 [](api::IZiaMediator &mediator, std::unique_ptr<api::IEvent>) {
                                      std::clog << "Consumer called" << std::endl;
                                      mediator.emit(std::make_unique<test::Event>());
                                  });
