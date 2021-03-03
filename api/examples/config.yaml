@@ -1,38 +1,3 @@
-modules:
-  http:
-    route:
-      /:
-        cgi: php
-        auth: true
-        name: truc
-      /blog/*:
-        auth: true
-        name: m
-      /blog/new:
-        name: perlinpinpin$=
-      /blog/admin/*:
-        auth: false
-        name: lacampagne-adm
-
-      /blog:
-        name: foo
-        auth: true
-        routes:
-          /new:
-            name: perlinpinpin
-        default: foo
-  cgi:
-    - php
-    - foo
-    - bar
-
-  php:
-    host: localhost
-    port: 1234
-
-
-###########
-
 http:
   cgi: php
   auth: true
@@ -50,6 +15,23 @@ http:
         /*:
           handler: zef
 
+# OR
+
+http:
+  cgi: php
+  auth: true
+  handler: cgi
+  routes:
+    /blog:
+      auth: true
+      handler: m
+      exact: true # false by default
+      routes:
+        /new:
+          handler: perlinpinpin$=
+        /admin/foo:
+          auth: false
+          handler: lacampagne-adm
 
 cgi:
   php:
