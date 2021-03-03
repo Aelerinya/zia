@@ -1,11 +1,13 @@
 #include "Server.hpp"
-#include "http/connection.hpp"
+#include "connection.hpp"
 #include "internal/onstart.hpp"
 
 const std::string name = "server";
 
-Server::Server(): asio_acceptor(asio_context,
-                                boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 80)) {}
+Server::Server(): web_acceptor(asio_context,
+                                boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 80)),
+                                websecure_acceptor(asio_context,
+                                boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 443)) {}
 
 Server::~Server() {}
 
@@ -31,10 +33,17 @@ void Server::init(zia::api::IZiaMediator &m) {
 }
 
 void Server::waitForClientConnection() {
-    asio_acceptor.async_accept(
+    web_acceptor.async_accept(
         [this](std::error_code ec, boost::asio::ip::tcp::socket socket) {
             auto con = std::make_unique<zia::api::NewHTTPConnectionEvent>(asio_context, std::move(socket));
             if (mediator) mediator->get().emit(static_cast<std::unique_ptr<zia::api::IEvent>>(std::move(con)));
+            this->waitForClientConnection();
+       }
+    );    websecure_acceptor.async_accept(
+        [this](std::error_code ec, boost::asio::ip::tcp::socket socket) {
+            auto con = std::make_unique<zia::api::NewHTTPSConnectionEvent>(asio_context, std::move(socket));
+            if (mediator) mediator->get().emit(static_cast<std::unique_ptr<zia::api::IEvent>>(std::move(con)));
+            this->waitForClientConnection();
        }
     );
 }
