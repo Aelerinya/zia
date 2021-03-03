@@ -9,9 +9,11 @@ public:
     const EventDescriptor &getDescriptor()const override;
 };
 
-const EventDescriptor OnStartEvent::event { event_base<OnStartEvent, name> };
+template<>
+constexpr zia::api::EventDescriptor event_descriptor<OnStartEvent> = { "OnStart" };
 
 inline const EventDescriptor &OnStartEvent::getDescriptor() const {
-    return event;
+    return api::event_descriptor<zia::api::OnStartEvent>;
 }
 }
+
