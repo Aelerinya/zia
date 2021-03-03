@@ -7,18 +7,7 @@
 
 namespace zia::api::http
 {
-enum class HTTPMethod
-{
-    GET,
-    HEAD,
-    POST,
-    PUT,
-    DELETE,
-    CONNECT,
-    OPTIONS,
-    TRACE,
-    PATCH
-};
+enum class HTTPMethod { GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH };
 
 struct HTTPRequest {
     HTTPMethod method;
@@ -29,8 +18,21 @@ struct HTTPRequest {
 
 class NewHTTPRequest : public IEvent
 {
-  public:
+public:
     virtual const HTTPRequest &getRequest() = 0;
+    const EventDescriptor &getDescriptor() const final;
 };
-} // namespace zia::api::http
-#endif // ZIA_HTTP_REQUEST_API_H_
+}    // namespace zia::api::http
+
+namespace zia::api
+{
+template <>
+constexpr EventDescriptor event_descriptor<http::NewHTTPRequest> = {"NewHTTPRequest"};
+
+inline const EventDescriptor &http::NewHTTPRequest ::getDescriptor() const
+{
+    return event_descriptor<http::NewHTTPRequest>;
+}
+
+}    // namespace zia::api
+#endif    // ZIA_HTTP_REQUEST_API_H_
