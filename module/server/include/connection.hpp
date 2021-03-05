@@ -53,7 +53,7 @@ public:
     HTTPRequestParsed(HTTPRequest r): IEvent(), req(std::move(r))
     {
     }
-    inline const EventDescriptor &getDescriptor()const final
+    inline const EventDescriptor &getDescriptor() const final
     {
         return api::event_descriptor<HTTPRequestParsed>;
     }

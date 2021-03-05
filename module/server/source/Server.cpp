@@ -29,10 +29,32 @@ extern "C" std::unique_ptr<zia::api::IModule>
 zia::api::load_module(zia::api::IZiaInitializer &init)
 {
     auto serv = std::make_unique<Server>();
-    auto onStart = zia::api::OnStartEvent();
     init.registerConsumer(
-        onStart.getDescriptor(),
+        zia::api::event_descriptor<zia::api::OnStartEvent>,
         [&serv](zia::api::IZiaMediator &m, std::unique_ptr<IEvent>) { serv->init(m); });
+    init.registerConsumer(
+        zia::api::event_descriptor<zia::api::NewHTTPConnectionEvent>,
+        [&serv](zia::api::IZiaMediator &m, std::unique_ptr<IEvent> ev) {
+            auto ht = dynamic_cast<NewHTTPConnectionEvent *>(ev.get());
+            boost::asio::streambuf buf;
+            boost::asio::async_read_until(
+                ht->socket, buf, "\r\n\r\n", [&](std::error_code ec, std::size_t len) {
+                    auto data = buf.data();
+                    buf.consume(len);
+                    std::string s(boost::asio::buffers_begin(data),
+                                  buffers_begin(data) + len);
+                    auto i = serv->parser.parse(s);
+                    boost::asio::async_read(ht->socket, boost::asio::buffer(i.body),
+                                            boost::asio::transfer_all(),
+                                            [&](std::error_code ec, std::size_t len) {});
+
+                    auto p = std::make_unique<zia::api::HTTPRequestParsed>(std::move(i));
+                    if (serv->mediator) {
+                        serv->mediator->get().emit(
+                            static_cast<std::unique_ptr<zia::api::IEvent>>(std::move(p)));
+                    }
+                });
+        });
     return std::move(serv);
 }
 

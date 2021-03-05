@@ -52,9 +52,9 @@ const std::unordered_set<std::string> std_http_header = {"A-IM",
 enum class HTTPVerbs { GET, POST, PUT, DELETE, PATCH, OPTIONS, TRACE, CONNECT, HEAD };
 
 struct HTTPHeader {
-    HTTPVerbs verb;
+    std::string verb;
     std::string path;
-    std::unordered_map<std::string, std::string> head;
+    std::unordered_map<std::string, std::string> heads;
 };
 
 struct HTTPRequest {
@@ -68,7 +68,10 @@ public:
     HTTPParser() = default;
     ~HTTPParser() = default;
 
-    HTTPRequest parse(const std::vector<uint8_t> &);
+    HTTPRequest parse(const std::string &);
+
+private:
+    HTTPHeader parseHeader(const std::string &);
 };
 
 #endif

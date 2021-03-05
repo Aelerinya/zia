@@ -12,10 +12,10 @@ public:
 
     void init(zia::api::IZiaMediator &mediator);
     void waitForClientConnection();
-
-private:
     HTTPParser parser;
     std::optional<std::reference_wrapper<zia::api::IZiaMediator>> mediator;
+
+private:
     std::thread context_thread;
     boost::asio::io_context asio_context;
     boost::asio::ip::tcp::acceptor web_acceptor;
