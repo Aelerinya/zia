@@ -34,11 +34,11 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
         [&serv](zia::api::IZiaMediator &m, std::unique_ptr<IEvent>) { serv->init(m); });
     init.registerConsumer(
         zia::api::event_descriptor<zia::api::NewHTTPConnectionEvent>,
-        [&serv](zia::api::IZiaMediator &m, std::unique_ptr<IEvent> ev) {
+        [&serv](zia::api::IZiaMediator &, std::unique_ptr<IEvent> ev) {
             auto ht = dynamic_cast<NewHTTPConnectionEvent *>(ev.get());
             boost::asio::streambuf buf;
             boost::asio::async_read_until(
-                ht->socket, buf, "\r\n\r\n", [&](std::error_code ec, std::size_t len) {
+                ht->socket, buf, "\r\n\r\n", [&](std::error_code, std::size_t len) {
                     auto data = buf.data();
                     buf.consume(len);
                     std::string s(boost::asio::buffers_begin(data),
@@ -46,7 +46,7 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
                     auto i = serv->parser.parse(s);
                     boost::asio::async_read(ht->socket, boost::asio::buffer(i.body),
                                             boost::asio::transfer_all(),
-                                            [&](std::error_code ec, std::size_t len) {});
+                                            [&](std::error_code, std::size_t) {});
 
                     auto p = std::make_unique<zia::api::HTTPRequestParsed>(std::move(i));
                     if (serv->mediator) {
@@ -55,7 +55,7 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
                     }
                 });
         });
-    return std::move(serv);
+    return serv;
 }
 
 void Server::init(zia::api::IZiaMediator &m)
@@ -67,7 +67,7 @@ void Server::init(zia::api::IZiaMediator &m)
 
 void Server::waitForClientConnection()
 {
-    web_acceptor.async_accept([this](std::error_code ec,
+    web_acceptor.async_accept([this](std::error_code,
                                      boost::asio::ip::tcp::socket socket) {
         auto con = std::make_unique<zia::api::NewHTTPConnectionEvent>(asio_context,
                                                                       std::move(socket));
@@ -76,7 +76,7 @@ void Server::waitForClientConnection()
                 static_cast<std::unique_ptr<zia::api::IEvent>>(std::move(con)));
         this->waitForClientConnection();
     });
-    websecure_acceptor.async_accept([this](std::error_code ec,
+    websecure_acceptor.async_accept([this](std::error_code,
                                            boost::asio::ip::tcp::socket socket) {
         auto con = std::make_unique<zia::api::NewHTTPSConnectionEvent>(asio_context,
                                                                        std::move(socket));
