@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(test_ModuleProxy)
     std::clog << "getting consumer" << std::endl;
     BOOST_TEST(initializer.consumers.at(0).first.get().name ==
                api::event_descriptor<test::Event>.name);
-    initializer.consumers.at(0).second(mediator, TestEvent());
+    initializer.consumers.at(0).second(mediator, std::make_unique<TestEvent>());
     BOOST_TEST(mediator.events.at(0)->getDescriptor().name ==
                api::event_descriptor<test::Event>.name);
     initializer.listeners.at(0).second(mediator, TestEvent());
