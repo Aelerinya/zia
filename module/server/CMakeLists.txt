@@ -7,3 +7,5 @@ add_library(zia_server SHARED
 
 include_directories(include)
 include_directories(../../api/)
+
+target_link_libraries(zia_server CONAN_PKG::boost)

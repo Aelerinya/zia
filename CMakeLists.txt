@@ -32,4 +32,4 @@ add_subdirectory(tests)
 
 add_executable(zia source/main.cpp)
 
-target_link_libraries(zia CONAN_PKG::boost dl zialib)
+target_link_libraries(zia zialib CONAN_PKG::boost)
