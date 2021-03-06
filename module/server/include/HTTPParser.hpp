@@ -1,11 +1,14 @@
 #ifndef __HTTPPARSER_HPP__
 #define __HTTPPARSER_HPP__
 
+#include "http/request.hpp"
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
+namespace zia::server
+{
 // could be constexpr
 const std::unordered_set<std::string> std_http_header = {"A-IM",
                                                          "Accept",
@@ -49,29 +52,17 @@ const std::unordered_set<std::string> std_http_header = {"A-IM",
                                                          "Via",
                                                          "Warning"};
 
-enum class HTTPVerbs { GET, POST, PUT, DELETE, PATCH, OPTIONS, TRACE, CONNECT, HEAD };
-
-struct HTTPHeader {
-    std::string verb;
-    std::string path;
-    std::unordered_map<std::string, std::string> heads;
-};
-
-struct HTTPRequest {
-    HTTPHeader head;
-    std::vector<uint8_t> body;
-};
-
 class HTTPParser
 {
 public:
     HTTPParser() = default;
     ~HTTPParser() = default;
 
-    HTTPRequest parse(const std::string &);
+    zia::api::http::HTTPRequest parse(const std::string &);
 
 private:
-    HTTPHeader parseHeader(const std::string &);
+    std::pair<zia::api::http::HTTPMethod, std::string> parseHeader(const std::string &);
 };
+}    // namespace zia::server
 
 #endif

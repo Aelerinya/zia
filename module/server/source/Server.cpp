@@ -4,7 +4,7 @@
 
 const std::string name = "server";
 
-Server::Server()
+zia::server::Server::Server()
     : web_acceptor(asio_context,
                    boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 80)),
       websecure_acceptor(asio_context,
@@ -12,23 +12,23 @@ Server::Server()
 {
 }
 
-Server::~Server()
+zia::server::Server::~Server()
 {
 }
 
-const std::string &Server::getName() const
+const std::string &zia::server::Server::getName() const
 {
     return name;
 }
 
-void Server::configureModule(const YAML::Node &)
+void zia::server::Server::configureModule(const YAML::Node &)
 {
 }
 
 extern "C" std::unique_ptr<zia::api::IModule>
 zia::api::load_module(zia::api::IZiaInitializer &init)
 {
-    auto serv = std::make_unique<Server>();
+    auto serv = std::make_unique<zia::server::Server>();
     init.registerConsumer(
         zia::api::event_descriptor<zia::api::OnStartEvent>,
         [&serv](zia::api::IZiaMediator &m, std::unique_ptr<IEvent>) { serv->init(m); });
@@ -58,14 +58,14 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
     return serv;
 }
 
-void Server::init(zia::api::IZiaMediator &m)
+void zia::server::Server::init(zia::api::IZiaMediator &m)
 {
     mediator = m;
     waitForClientConnection();
     context_thread = std::thread([this]() { asio_context.run(); });
 }
 
-void Server::waitForClientConnection()
+void zia::server::Server::waitForClientConnection()
 {
     web_acceptor.async_accept([this](std::error_code,
                                      boost::asio::ip::tcp::socket socket) {

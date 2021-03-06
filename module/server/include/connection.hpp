@@ -47,19 +47,20 @@ inline const EventDescriptor &NewHTTPSConnectionEvent::getDescriptor() const
     return api::event_descriptor<zia::api::NewHTTPConnectionEvent>;
 }
 
-class HTTPRequestParsed : public IEvent
+class HTTPRequestParsed : public http::NewHTTPRequest
 {
 public:
-    HTTPRequestParsed(HTTPRequest r): IEvent(), req(std::move(r))
+    HTTPRequestParsed(http::HTTPRequest r): http::NewHTTPRequest(), req(std::move(r))
     {
     }
-    inline const EventDescriptor &getDescriptor() const final
+
+    const http::HTTPRequest &getRequest()
     {
-        return api::event_descriptor<HTTPRequestParsed>;
+        return req;
     }
 
 public:
-    HTTPRequest req;
+    http::HTTPRequest req;
 };
 
 }    // namespace zia::api

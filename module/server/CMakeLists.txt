@@ -9,3 +9,4 @@ include_directories(include)
 include_directories(../../api/)
 
 target_link_libraries(zia_server CONAN_PKG::boost)
+target_link_libraries(zia_server CONAN_PKG::magic_enum)

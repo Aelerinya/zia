@@ -2,7 +2,9 @@
 #include "module.hpp"
 #include <boost/asio.hpp>
 
-class Server : public virtual zia::api::IModule
+namespace zia::server
+{
+class Server : public virtual api::IModule
 {
 public:
     Server();
@@ -10,10 +12,10 @@ public:
     const std::string &getName() const final;
     void configureModule(const YAML::Node &) final;
 
-    void init(zia::api::IZiaMediator &mediator);
+    void init(api::IZiaMediator &mediator);
     void waitForClientConnection();
     HTTPParser parser;
-    std::optional<std::reference_wrapper<zia::api::IZiaMediator>> mediator;
+    std::optional<std::reference_wrapper<api::IZiaMediator>> mediator;
 
 private:
     std::thread context_thread;
@@ -22,5 +24,6 @@ private:
     boost::asio::ip::tcp::acceptor websecure_acceptor;
 };
 
+}    // namespace zia::server
 extern "C" std::unique_ptr<zia::api::IModule>
 zia::api::load_module(zia::api::IZiaInitializer &);
