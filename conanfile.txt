@@ -2,6 +2,7 @@
 boost/1.74.0
 openssl/1.0.2s
 yaml-cpp/0.6.3
+magic_enum/0.7.2
 
 [generators]
 cmake
