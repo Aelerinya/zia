@@ -1,9 +1,11 @@
 #ifndef ZIA_HTTP_REQUEST_API_H_
 #define ZIA_HTTP_REQUEST_API_H_
 
-#include "../event.hpp"
 #include <string>
 #include <unordered_map>
+
+#include "../event.hpp"
+#include "response.hpp"
 
 namespace zia::api::http
 {
@@ -20,6 +22,7 @@ class NewHTTPRequest : public IEvent
 {
 public:
     virtual const HTTPRequest &getRequest() = 0;
+    virtual std::unique_ptr<IEvent> createResponse(const HTTPResponse &response) = 0;
     const EventDescriptor &getDescriptor() const final;
 };
 }    // namespace zia::api::http

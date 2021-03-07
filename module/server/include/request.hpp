@@ -14,7 +14,8 @@ public:
     NewHTTPRequest(const api::http::HTTPRequest &, boost::asio::ip::tcp::socket socket);
 
     const api::http::HTTPRequest &getRequest() override;
-    std::unique_ptr<IEvent> createResponse(const api::http::HTTPResponse &response);
+    std::unique_ptr<IEvent>
+    createResponse(const api::http::HTTPResponse &response) override;
 
 private:
     api::http::HTTPRequest m_request;
