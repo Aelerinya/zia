@@ -1,6 +1,9 @@
 #include "Server.hpp"
 #include "connection.hpp"
 #include "internal/onstart.hpp"
+#include "response.hpp"
+#include <iostream>
+#include <string>
 
 const std::string name = "server";
 
@@ -29,6 +32,27 @@ extern "C" std::unique_ptr<zia::api::IModule>
 zia::api::load_module(zia::api::IZiaInitializer &init)
 {
     auto serv = std::make_unique<zia::server::Server>();
+    init.registerConsumer(
+        zia::api::event_descriptor<zia::server::NewHTTPResponse>,
+        [&serv](zia::api::IZiaMediator &m, std::unique_ptr<IEvent> ev) {
+            const auto ht = dynamic_cast<zia::server::NewHTTPResponse *>(ev.get());
+            const auto &rq = ht->getResponse();
+            std::stringstream rp;
+            rp << "HTTP/1.1 " << rq.status_code << " " << rq.status_message << "\r\n";
+            for (const auto &[k, v]: rq.headers) {
+                rp << k << ": " << v << "\r\n";
+            }
+            rp << "\r\n";
+            rp << rq.body;
+            boost::asio::async_write(ht->getSocket(),
+                                     boost::asio::buffer(rp.str(), rp.str().size()),
+                                     [&serv](std::error_code ec, std::size_t len) {
+                                         if (ec) {
+                                             std::clog << "Error while sending msg: "
+                                                       << ec.message() << std::endl;
+                                         }
+                                     });
+        });
     init.registerConsumer(
         zia::api::event_descriptor<zia::api::OnStartEvent>,
         [&serv](zia::api::IZiaMediator &m, std::unique_ptr<IEvent>) { serv->init(m); });
