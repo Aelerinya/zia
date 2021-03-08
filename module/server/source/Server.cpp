@@ -35,7 +35,7 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
     auto serv = std::make_unique<zia::server::Server>();
     init.registerConsumer(
         zia::api::event_descriptor<zia::server::NewHTTPResponse>,
-        [&serv](zia::api::IZiaMediator &m, std::unique_ptr<IEvent> ev) {
+        [](zia::api::IZiaMediator &, std::unique_ptr<IEvent> ev) {
             const auto ht = dynamic_cast<zia::server::NewHTTPResponse *>(ev.get());
             const auto &rq = ht->getResponse();
             std::stringstream rp;
@@ -47,7 +47,7 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
             rp << rq.body;
             boost::asio::async_write(ht->getSocket(),
                                      boost::asio::buffer(rp.str(), rp.str().size()),
-                                     [&serv](std::error_code ec, std::size_t len) {
+                                     [](std::error_code ec, std::size_t) {
                                          if (ec) {
                                              std::clog << "Error while sending msg: "
                                                        << ec.message() << std::endl;
