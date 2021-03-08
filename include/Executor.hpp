@@ -21,6 +21,7 @@ public:
 
     void step();
     void handleEvent(std::unique_ptr<api::IEvent>);
+    void reloadConfig();
 
     // Testing
     const EventQueue &getEventQueue() const;

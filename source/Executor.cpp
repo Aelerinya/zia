@@ -4,6 +4,7 @@
 
 #include "Executor.hpp"
 #include "api/internal/onstart.hpp"
+#include "config.hpp"
 
 using namespace zia;
 
@@ -39,8 +40,24 @@ void Executor::step()
     this->handleEvent(std::move(event));
 }
 
+void Executor::reloadConfig()
+{
+    std::clog << "Reloading config" << std::endl;
+
+    std::clog << "Dropping " << m_event_queue.size() << " events" << std::endl;
+    m_event_queue = {};
+
+    std::clog << "Calling config loader" << std::endl;
+    // TODO: Call the config loader
+}
+
 void Executor::handleEvent(std::unique_ptr<api::IEvent> event)
 {
+    if (event->getDescriptor() == api::event_descriptor<ReloadConfig>) {
+        this->reloadConfig();
+        return;
+    }
+
     Mediator mediator(m_event_queue);
     auto descriptor = event->getDescriptor();
     auto listeners = m_module_hub.getEventListeners(descriptor);
