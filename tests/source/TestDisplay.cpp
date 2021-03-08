@@ -16,3 +16,10 @@ std::ostream &std::operator<<(std::ostream &stream, zia::api::http::HTTPMethod m
     }
     return stream;
 }
+
+std::ostream &std::operator<<(std::ostream &stream,
+                              const zia::api::EventDescriptor &descriptor)
+{
+    stream << "EventDescriptor{" << descriptor.name << "}";
+    return stream;
+}
