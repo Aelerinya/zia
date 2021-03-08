@@ -1,3 +1,4 @@
 add_subdirectory(server)
 add_subdirectory(router)
+add_subdirectory(static)
 add_subdirectory(test)
