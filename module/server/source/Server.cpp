@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include "connection.hpp"
+#include "request.hpp"
 #include "internal/onstart.hpp"
 #include "response.hpp"
 #include <iostream>
@@ -72,7 +73,7 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
                                             boost::asio::transfer_all(),
                                             [&](std::error_code, std::size_t) {});
 
-                    auto p = std::make_unique<zia::api::HTTPRequestParsed>(std::move(i));
+                    auto p = std::make_unique<zia::server::NewHTTPRequest>(std::move(i), std::move(ht->socket));
                     if (serv->mediator) {
                         serv->mediator->get().emit(
                             static_cast<std::unique_ptr<zia::api::IEvent>>(std::move(p)));
