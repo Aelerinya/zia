@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(test_ModuleProxy)
     YAML::Load("key: value");
     test::Initializer initializer;
     test::Mediator mediator;
-    zia::ModuleProxy proxy("lib/libtestmodule.so", initializer);
+    zia::ModuleProxy proxy("lib/testmodule", initializer);
 
     std::clog << initializer.consumers.at(0).first.get().name << std::endl;
     BOOST_TEST(proxy.getName() == test::Module::module_name);

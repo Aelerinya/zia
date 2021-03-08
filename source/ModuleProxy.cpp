@@ -6,7 +6,7 @@ namespace fs = std::filesystem;
 
 ModuleProxy::ModuleProxy(const fs::path &path, api::IZiaInitializer &initializer)
     : m_path(path),
-      m_library(path.string()),
+      m_library(path.string(), boost::dll::load_mode::append_decorations),
       m_module(m_library.get<decltype(api::load_module)>("load_module")(initializer))
 {
 }
