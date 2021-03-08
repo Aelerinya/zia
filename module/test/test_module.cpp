@@ -1,4 +1,5 @@
 #include "test_module.hpp"
+#include "api/internal/onstart.hpp"
 #include "api/mediator.hpp"
 #include <iostream>
 
@@ -23,14 +24,19 @@ void test::Module::configureModule([[maybe_unused]] const YAML::Node &config)
 extern "C" std::unique_ptr<api::IModule>
 load_module([[maybe_unused]] api::IZiaInitializer &initializer)
 {
+    initializer.registerConsumer(
+        api::event_descriptor<api::OnStartEvent>,
+        [](api::IZiaMediator &mediator, std::unique_ptr<api::IEvent>) {
+            std::clog << "Start event called" << std::endl;
+            mediator.emit(std::make_unique<test::Event>());
+        });
     initializer.registerListener(api::event_descriptor<test::Event>,
                                  [](const api::IZiaMediator &, const api::IEvent &) {
                                      std::clog << "Listener called" << std::endl;
                                  });
     initializer.registerConsumer(api::event_descriptor<test::Event>,
-                                 [](api::IZiaMediator &mediator, std::unique_ptr<api::IEvent>) {
+                                 [](api::IZiaMediator &, std::unique_ptr<api::IEvent>) {
                                      std::clog << "Consumer called" << std::endl;
-                                     mediator.emit(std::make_unique<test::Event>());
                                  });
     return std::make_unique<test::Module>();
 }
