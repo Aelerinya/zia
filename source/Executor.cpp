@@ -8,6 +8,56 @@
 
 using namespace zia;
 
+void Executor::EventQueue::emit(std::unique_ptr<zia::api::IEvent> event)
+{
+    std::lock_guard<std::mutex> guard(m_mutex);
+    if (!m_stopped)
+        m_queue.push(std::move(event));
+}
+
+void Executor::EventQueue::push(std::unique_ptr<zia::api::IEvent> &&event)
+{
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_queue.push(std::move(event));
+}
+
+std::optional<std::unique_ptr<zia::api::IEvent>> Executor::EventQueue::pop()
+{
+    std::lock_guard<std::mutex> guard(m_mutex);
+    if (m_queue.empty()) {
+        return std::nullopt;
+    } else {
+        std::unique_ptr<api::IEvent> event;
+        m_queue.front().swap(event);
+        m_queue.pop();
+        return event;
+    }
+}
+
+std::size_t Executor::EventQueue::size() const
+{
+    std::lock_guard<std::mutex> guard(m_mutex);
+    return m_queue.size();
+}
+
+bool Executor::EventQueue::empty() const
+{
+    std::lock_guard<std::mutex> guard(m_mutex);
+    return m_queue.empty();
+}
+
+void Executor::EventQueue::clear()
+{
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_queue = {};
+}
+
+void Executor::EventQueue::setStop(bool stop_status)
+{
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_stopped = stop_status;
+}
+
 Executor::Executor(ModuleHub &hub): m_module_hub(hub), m_event_queue()
 {
 }
@@ -32,12 +82,9 @@ void Executor::loop()
 
 void Executor::step()
 {
-    if (m_event_queue.empty())
-        return;
-    std::unique_ptr<api::IEvent> event;
-    m_event_queue.front().swap(event);
-    m_event_queue.pop();
-    this->handleEvent(std::move(event));
+    auto event = m_event_queue.pop();
+    if (event.has_value())
+        this->handleEvent(std::move(*event));
 }
 
 void Executor::reloadConfig()
@@ -45,10 +92,14 @@ void Executor::reloadConfig()
     std::clog << "Reloading config" << std::endl;
 
     std::clog << "Dropping " << m_event_queue.size() << " events" << std::endl;
-    m_event_queue = {};
+    m_event_queue.setStop(true);
+    m_event_queue.clear();
 
     std::clog << "Calling config loader" << std::endl;
     // TODO: Call the config loader
+
+    // FIXME: Use RAII to stop the queue
+    m_event_queue.setStop(false);
 }
 
 void Executor::handleEvent(std::unique_ptr<api::IEvent> event)
@@ -58,15 +109,14 @@ void Executor::handleEvent(std::unique_ptr<api::IEvent> event)
         return;
     }
 
-    Mediator mediator(m_event_queue);
     auto descriptor = event->getDescriptor();
     auto listeners = m_module_hub.getEventListeners(descriptor);
     for (auto listener: listeners) {
-        listener(mediator, *event.get());
+        listener(m_event_queue, *event.get());
     }
     auto consumer = m_module_hub.getEventConsumer(descriptor);
     if (consumer.has_value())
-        consumer.value()(mediator, std::move(event));
+        consumer.value()(m_event_queue, std::move(event));
     else
         std::clog << "No consumer found for event " << descriptor.name << std::endl;
 }
@@ -74,13 +124,4 @@ void Executor::handleEvent(std::unique_ptr<api::IEvent> event)
 const Executor::EventQueue &Executor::getEventQueue() const
 {
     return m_event_queue;
-}
-
-Executor::Mediator::Mediator(EventQueue &queue): m_queue(queue)
-{
-}
-
-void Executor::Mediator::emit(std::unique_ptr<api::IEvent> event)
-{
-    m_queue.push(std::move(event));
 }

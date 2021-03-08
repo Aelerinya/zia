@@ -1,6 +1,8 @@
 #ifndef ZIA_EXECUTOR_H_
 #define ZIA_EXECUTOR_H_
 
+#include <mutex>
+#include <optional>
 #include <queue>
 
 #include "ModuleHub.hpp"
@@ -12,7 +14,22 @@ namespace zia
 class Executor
 {
 public:
-    using EventQueue = std::queue<std::unique_ptr<zia::api::IEvent>>;
+    class EventQueue : public api::IZiaMediator
+    {
+    public:
+        void emit(std::unique_ptr<api::IEvent>) override;
+        void push(std::unique_ptr<zia::api::IEvent> &&);
+        std::optional<std::unique_ptr<zia::api::IEvent>> pop();
+        std::size_t size() const;
+        bool empty() const;
+        void clear();
+        void setStop(bool stop_status);
+
+    private:
+        std::queue<std::unique_ptr<zia::api::IEvent>> m_queue;
+        bool m_stopped = false;
+        mutable std::mutex m_mutex;
+    };
 
     Executor(ModuleHub &hub);
 
@@ -29,17 +46,6 @@ public:
 private:
     ModuleHub &m_module_hub;
     EventQueue m_event_queue;
-
-    class Mediator : public api::IZiaMediator
-    {
-    public:
-        Mediator(EventQueue &queue);
-
-        void emit(std::unique_ptr<api::IEvent>) override;
-
-    private:
-        EventQueue &m_queue;
-    };
 };
 
 }    // namespace zia
