@@ -7,14 +7,13 @@
 #include "ModuleProxy.hpp"
 
 
-
 namespace zia {
 
 class ModuleHub {
     using ModuleName = std::string_view;
 
 public:
-    void loadModule(std::filesystem::path);
+    void loadModule(const std::filesystem::path&);
     void unloadModule(ModuleName module);
 
     auto getModule(ModuleName)

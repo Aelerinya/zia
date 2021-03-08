@@ -1,6 +1,7 @@
 add_library(zialib OBJECT
   ModuleProxy.cpp
   ModuleHub.cpp
+  ConfigLoader.cpp
   Executor.cpp)
 
 target_link_libraries(zialib

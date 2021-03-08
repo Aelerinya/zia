@@ -5,7 +5,7 @@
 namespace zia {
 
 
-void ModuleHub::loadModule(const std::filesystem::path path)
+void ModuleHub::loadModule(const std::filesystem::path& path)
 {
     struct Initializer : api::IZiaInitializer, Module::Registrations {
 

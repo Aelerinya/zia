@@ -4,7 +4,7 @@
 
 #include "Executor.hpp"
 #include "api/internal/onstart.hpp"
-#include "config.hpp"
+#include "ConfigLoader.hpp"
 
 using namespace zia;
 

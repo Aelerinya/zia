@@ -26,3 +26,4 @@ add_subdirectory(module)
 add_subdirectory(tests)
 
 add_executable(zia source/main.cpp)
+target_link_libraries(zia zialib)
