@@ -7,32 +7,6 @@
 #include "ModuleProxy.hpp"
 
 
-namespace zia::api {
-
-constexpr bool operator==(
-    const zia::api::EventDescriptor& lhs,
-    const zia::api::EventDescriptor& rhs
-) {
-    return lhs.name == rhs.name;
-}
-
-} // namespace zia::api
-
-
-namespace std {
-
-template<> struct hash<
-    std::reference_wrapper<const zia::api::EventDescriptor>
-> {
-    std::size_t operator()(
-        const zia::api::EventDescriptor& event
-    ) const {
-        return std::hash<std::string_view>{}(event.name);
-    }
-};
-
-} // namespace std
-
 
 namespace zia {
 
