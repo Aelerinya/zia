@@ -1,9 +1,9 @@
-add_executable(test_static_handler
-  test_static_handler.cpp
+add_executable(test_static
+  test_static.cpp
   ../static.cpp)
 
-target_link_libraries(test_static_handler
-  # ziatestlib
+target_link_libraries(test_static
   CONAN_PKG::boost
   CONAN_PKG::yaml-cpp)
-add_test(NAME TestStaticHandler COMMAND test_static_handler)
+
+add_test(NAME TestStatic COMMAND test_static)

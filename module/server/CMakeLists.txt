@@ -1,14 +1,11 @@
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED 20)
-
-add_library(zia_server SHARED
-            source/Server.cpp
-            source/HTTPParser.cpp
-            source/request.cpp
-            source/response.cpp)
+add_library(ziaserver MODULE
+  source/Server.cpp
+  source/HTTPParser.cpp
+  source/request.cpp
+  source/response.cpp)
 
 include_directories(include)
-include_directories(../../api/)
 
-target_link_libraries(zia_server CONAN_PKG::boost)
-target_link_libraries(zia_server CONAN_PKG::magic_enum)
+target_link_libraries(ziaserver
+  CONAN_PKG::boost
+  CONAN_PKG::magic_enum)

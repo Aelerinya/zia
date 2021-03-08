@@ -1,9 +1,11 @@
-add_library(router MODULE
+add_library(ziarouter MODULE
   source/router.cpp
   source/entrypoint.cpp)
 
 include_directories(include)
 
-target_link_libraries(router CONAN_PKG::boost)
+target_link_libraries(ziarouter
+  CONAN_PKG::boost
+  CONAN_PKG::yaml-cpp)
 
 add_subdirectory(tests)

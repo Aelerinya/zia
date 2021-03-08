@@ -1,2 +1,2 @@
-add_library(testmodule SHARED
+add_library(testmodule MODULE
   test_module.cpp)
