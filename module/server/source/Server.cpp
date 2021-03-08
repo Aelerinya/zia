@@ -18,6 +18,8 @@ zia::server::Server::Server()
 
 zia::server::Server::~Server()
 {
+    asio_context.stop();
+    if (context_thread.joinable()) { context_thread.join(); };
 }
 
 const std::string &zia::server::Server::getName() const
