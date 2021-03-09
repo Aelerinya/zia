@@ -1,13 +1,15 @@
+#include <iostream>
+#include <memory>
+#include <string>
+#include <yaml-cpp/yaml.h>
+
+
 #include "Server.hpp"
 #include "api/internal/onstart.hpp"
 #include "connection.hpp"
 #include "request.hpp"
 #include "response.hpp"
 #include "utils.hpp"
-#include <iostream>
-#include <memory>
-#include <string>
-#include <yaml-cpp/yaml.h>
 
 const std::string name = "server";
 

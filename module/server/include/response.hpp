@@ -1,8 +1,9 @@
 #ifndef ZIA_SERVER_RESPONSE_H_
 #define ZIA_SERVER_RESPONSE_H_
 
-#include "api/http/response.hpp"
 #include <boost/asio/ip/tcp.hpp>
+
+#include "api/http/response.hpp"
 
 namespace zia::server
 {

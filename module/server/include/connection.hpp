@@ -1,13 +1,14 @@
 #ifndef ZIA_HTTP_CONNECTION_H_
 #define ZIA_HTTP_CONNECTION_H_
 
-#include "HTTPParser.hpp"
-#include "api/http/connection.hpp"
-#include "api/mediator.hpp"
 #include <boost/asio.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
+
+#include "HTTPParser.hpp"
+#include "api/http/connection.hpp"
+#include "api/mediator.hpp"
 
 namespace zia::server
 {

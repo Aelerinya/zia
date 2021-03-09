@@ -1,7 +1,8 @@
-#include "HTTPParser.hpp"
 #include <iostream>
 #include <magic_enum.hpp>
 #include <regex>
+
+#include "HTTPParser.hpp"
 
 zia::api::http::HTTPRequest zia::server::HTTPParser::parse(const std::string &s)
 {

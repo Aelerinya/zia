@@ -1,8 +1,10 @@
 #ifndef ZIA_HTTP_RESPONSE_API_H_
 #define ZIA_HTTP_RESPONSE_API_H_
 
-#include "../event.hpp"
 #include <string>
+
+#include "../event.hpp"
+
 
 namespace zia::api::http
 {
