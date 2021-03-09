@@ -1,5 +1,4 @@
 #include "ModuleProxy.hpp"
-#include <dlfcn.h>
 
 using namespace zia;
 namespace fs = std::filesystem;

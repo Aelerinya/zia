@@ -3,10 +3,8 @@
 namespace zia::api {
 
 class OnStartEvent: public IEvent {
-    static constexpr const char name[] { "Zia is starting" };
-    static const EventDescriptor event;
 public:
-    const EventDescriptor &getDescriptor()const override;
+    const EventDescriptor &getDescriptor()const final;
 };
 
 template<>

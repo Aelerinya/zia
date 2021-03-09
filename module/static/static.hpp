@@ -2,6 +2,7 @@
 #define ZIA_STATIC_H_
 
 #include <filesystem>
+#include <optional>
 
 #include "api/http/response.hpp"
 #include "api/http/routing.hpp"

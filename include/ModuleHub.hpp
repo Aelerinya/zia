@@ -4,6 +4,8 @@
 #include <memory>
 #include <filesystem>
 #include <unordered_map>
+#include <optional>
+#include <ranges>
 #include "ModuleProxy.hpp"
 
 

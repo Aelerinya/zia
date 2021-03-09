@@ -3,6 +3,7 @@
 #include "connection.hpp"
 #include "response.hpp"
 #include <boost/asio.hpp>
+#include <optional>
 
 namespace zia::server
 {
