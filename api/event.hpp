@@ -26,7 +26,7 @@ constexpr EventDescriptor event_descriptor;
 class IZiaMediator;
 
 using EventConsumer = std::function<void(IZiaMediator &, std::unique_ptr<IEvent>)>;
-using EventListener = std::function<void(const IZiaMediator &, const IEvent &)>;
+using EventListener = std::function<void(IZiaMediator &, const IEvent &)>;
 
 }    // namespace zia::api
 
