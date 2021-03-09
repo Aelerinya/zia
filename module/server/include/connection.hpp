@@ -8,10 +8,10 @@
 #include <string>
 #include <vector>
 
-namespace zia::api
+namespace zia::server
 {
 
-class NewHTTPConnectionEvent : public IEvent
+class NewHTTPConnectionEvent : public api::IEvent
 {
 public:
     NewHTTPConnectionEvent(boost::asio::io_context &ic, boost::asio::ip::tcp::socket s)
@@ -22,15 +22,15 @@ public:
     // event_base<NewConnectionEvent, NewConnectionEvent::event_name>;
     boost::asio::ip::tcp::socket socket;
     std::reference_wrapper<boost::asio::io_context> context;
-    const EventDescriptor &getDescriptor() const override;
+    const api::EventDescriptor &getDescriptor() const override;
 };
 
-inline const EventDescriptor &NewHTTPConnectionEvent::getDescriptor() const
+inline const api::EventDescriptor &NewHTTPConnectionEvent::getDescriptor() const
 {
-    return api::event_descriptor<zia::api::NewHTTPConnectionEvent>;
+    return api::event_descriptor<zia::server::NewHTTPConnectionEvent>;
 }
 
-class NewHTTPSConnectionEvent : public IEvent
+class NewHTTPSConnectionEvent : public api::IEvent
 {
 public:
     NewHTTPSConnectionEvent(boost::asio::io_context &ic, boost::asio::ip::tcp::socket s)
@@ -39,30 +39,31 @@ public:
     }
     boost::asio::ip::tcp::socket socket;
     std::reference_wrapper<boost::asio::io_context> context;
-    const EventDescriptor &getDescriptor() const override;
+    const api::EventDescriptor &getDescriptor() const override;
 };
 
-inline const EventDescriptor &NewHTTPSConnectionEvent::getDescriptor() const
+inline const api::EventDescriptor &NewHTTPSConnectionEvent::getDescriptor() const
 {
-    return api::event_descriptor<zia::api::NewHTTPConnectionEvent>;
+    return api::event_descriptor<zia::server::NewHTTPConnectionEvent>;
 }
 
-class HTTPRequestParsed : public http::NewHTTPRequest
+class HTTPRequestParsed : public api::http::NewHTTPRequest
 {
 public:
-    HTTPRequestParsed(http::HTTPRequest r): http::NewHTTPRequest(), req(std::move(r))
+    HTTPRequestParsed(api::http::HTTPRequest r)
+        : api::http::NewHTTPRequest(), req(std::move(r))
     {
     }
 
-    const http::HTTPRequest &getRequest()
+    const api::http::HTTPRequest &getRequest()
     {
         return req;
     }
 
 public:
-    http::HTTPRequest req;
+    api::http::HTTPRequest req;
 };
 
-}    // namespace zia::api
+}    // namespace zia::server
 
 #endif

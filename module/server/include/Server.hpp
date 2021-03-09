@@ -1,21 +1,24 @@
 #include "HTTPParser.hpp"
 #include "api/module.hpp"
+#include "response.hpp"
+#include "connection.hpp"
 #include <boost/asio.hpp>
 
 namespace zia::server
 {
-class Server : public virtual api::IModule
+
+class Server
 {
 public:
-    Server();
+    Server(api::IZiaMediator &mediator, short http_port = 80, short https_port = 443);
     ~Server();
-    const std::string &getName() const final;
-    void configureModule(const YAML::Node &) final;
 
-    void init(api::IZiaMediator &mediator);
     void waitForClientConnection();
     HTTPParser parser;
-    std::optional<std::reference_wrapper<api::IZiaMediator>> mediator;
+    api::IZiaMediator &mediator;
+
+    void onHTTPResponse(std::unique_ptr<zia::server::NewHTTPResponse> response);
+    void onHTTPConnection(std::unique_ptr<zia::server::NewHTTPConnectionEvent> connection);
 
 private:
     std::thread context_thread;
@@ -24,6 +27,20 @@ private:
     boost::asio::ip::tcp::acceptor websecure_acceptor;
 };
 
+class Module : public api::IModule
+{
+public:
+    const std::string &getName() const final;
+    void configureModule(const YAML::Node &) final;
+    void start(zia::api::IZiaMediator &mediator);
+
+    std::optional<std::reference_wrapper<Server>> getServer();
+
+private:
+    short http_port = 80;
+    short https_port = 443;
+    std::optional<Server> server;
+};
 }    // namespace zia::server
 extern "C" std::unique_ptr<zia::api::IModule>
 zia::api::load_module(zia::api::IZiaInitializer &);
