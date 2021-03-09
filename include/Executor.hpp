@@ -5,6 +5,7 @@
 #include <optional>
 #include <queue>
 
+#include "ConfigLoader.hpp"
 #include "ModuleHub.hpp"
 #include "api/event.hpp"
 #include "api/mediator.hpp"
@@ -31,7 +32,7 @@ public:
         mutable std::mutex m_mutex;
     };
 
-    Executor(ModuleHub &hub);
+    Executor(ModuleHub &hub, zia::ConfigLoader &config);
 
     void start();
     void loop();
@@ -45,6 +46,7 @@ public:
 
 private:
     ModuleHub &m_module_hub;
+    ConfigLoader &m_config_loader;
     EventQueue m_event_queue;
 };
 

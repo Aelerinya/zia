@@ -13,7 +13,7 @@ int main(int argc, const char* const* argv) try
 
     zia::ModuleHub module_hub;
     zia::ConfigLoader config_loader { argv[1], argv[2], module_hub };
-    zia::Executor executor {module_hub};
+    zia::Executor executor {module_hub, config_loader};
 
     executor.start();
 }

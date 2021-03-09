@@ -2,9 +2,9 @@
 #include <iostream>
 #include <thread>
 
+#include "ConfigLoader.hpp"
 #include "Executor.hpp"
 #include "api/internal/onstart.hpp"
-#include "ConfigLoader.hpp"
 
 using namespace zia;
 
@@ -58,7 +58,8 @@ void Executor::EventQueue::setStop(bool stop_status)
     m_stopped = stop_status;
 }
 
-Executor::Executor(ModuleHub &hub): m_module_hub(hub), m_event_queue()
+Executor::Executor(ModuleHub &hub, ConfigLoader &config)
+    : m_module_hub(hub), m_config_loader(config), m_event_queue()
 {
 }
 
@@ -96,7 +97,8 @@ void Executor::reloadConfig()
     m_event_queue.clear();
 
     std::clog << "Calling config loader" << std::endl;
-    // TODO: Call the config loader
+
+    m_config_loader.reloadConfig();
 
     // FIXME: Use RAII to stop the queue
     m_event_queue.setStop(false);
