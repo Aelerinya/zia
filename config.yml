@@ -13,3 +13,6 @@ router:
 
 static:
   base_directory: ./static
+  default:
+    - index.html
+    - index.php

@@ -22,6 +22,9 @@ public:
 
 private:
     std::optional<std::filesystem::path> m_base_directory;
+    std::vector<std::string> m_default_files;
+
+    std::optional<std::filesystem::path> findRessource(const api::http::Route &);
 };
 }    // namespace zia
 
