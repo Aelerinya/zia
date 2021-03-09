@@ -79,9 +79,11 @@ void zia::server::Server::onHTTPResponse(
         rp << rq.body;
     }
 
+    auto str { std::make_unique<std::string>(rp.str()) };
+    auto buffer { boost::asio::buffer(*str, str->size()) };
     boost::asio::async_write(
-        response->getSocket(), boost::asio::buffer(rp.str(), rp.str().size()),
-        [](std::error_code ec, std::size_t) {
+        response->getSocket(), std::move(buffer),
+        [_ = std::move(str)](std::error_code ec, std::size_t) {
             if (ec) {
                 std::clog << "Error while sending msg: " << ec.message() << std::endl;
             }
