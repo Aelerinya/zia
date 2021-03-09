@@ -32,7 +32,7 @@ void ConfigLoader::reloadConfig()
         m_module_hub.unloadModule(module_config.first.as<std::string>());
     }
 
-    m_current_config = YAML::LoadFile(m_config_file);
+    m_current_config = YAML::LoadFile(m_config_file.string());
     const auto modules { m_current_config["modules"] };
     m_current_config.remove("modules");
 
