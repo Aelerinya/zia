@@ -5,13 +5,21 @@
 
 zia::api::http::HTTPRequest zia::server::HTTPParser::parse(const std::string &s)
 {
+    std::clog << "Parsing request " << s << std::endl;
+
     zia::api::http::HTTPRequest req;
-    std::deque<std::string> line;
+    std::vector<std::string> line;
+    std::string delimiter = "\r\n";
     std::regex crlf_reg("(\r\n)+");
-    auto words_begin = std::sregex_iterator(s.begin(), s.end(), crlf_reg);
-    auto words_end = std::sregex_iterator();
-    for (auto i = words_begin; i != words_end; ++i) {
-        line.push_back(i->str());
+    std::size_t start = 0;
+    while (start != s.size()) {
+        std::size_t pos = s.find(delimiter, start);
+        std::string token = s.substr(start, pos - start);
+        std::clog << "Request line: " << token << std::endl;
+        start += token.size() + delimiter.size();
+
+        if (!token.empty())
+            line.push_back(token);
     }
     auto i = this->parseHeader(line.at(0));
     req.method = std::move(i.first);
@@ -31,14 +39,14 @@ zia::api::http::HTTPRequest zia::server::HTTPParser::parse(const std::string &s)
 std::pair<zia::api::http::HTTPMethod, std::string>
 zia::server::HTTPParser::parseHeader(const std::string &s)
 {
-
+    std::clog << "Parsing request header " << s << std::endl;
     std::pair<zia::api::http::HTTPMethod, std::string> ret;
-    std::regex method_path("^(GET|HEAD|TRACE|OPTIONS|PUT|PATCH)\\s+(\\S+)<\\s+(HTTP)");
+    std::regex method_path(R"#(^(GET|HEAD|TRACE|OPTIONS|PUT|PATCH)\s+(\S+)\s+(HTTP))#");
     std::smatch matches;
     if (std::regex_search(s, matches, method_path)) {
-        auto e = magic_enum::enum_cast<zia::api::http::HTTPMethod>(matches[0].str());
+        auto e = magic_enum::enum_cast<zia::api::http::HTTPMethod>(matches[1].str());
         ret.first = *e;
-        ret.second = matches[1];
+        ret.second = matches[2];
     }
     return ret;
 }
