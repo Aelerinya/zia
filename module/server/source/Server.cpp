@@ -86,11 +86,12 @@ void zia::server::Server::onHTTPResponse(
 void zia::server::Server::onHTTPConnection(
     std::unique_ptr<zia::server::NewHTTPConnectionEvent> connection)
 {
-
-    auto buf = std::make_shared<boost::asio::streambuf>();
+    auto buf = std::make_unique<boost::asio::streambuf>();
+    auto &buf_ref = *buf;
+    auto &socket = connection->socket;
     boost::asio::async_read_until(
-        connection->socket, *buf, "\r\n\r\n",
-        [buf, this, connection = std::move(connection)](std::error_code,
+        socket, buf_ref, "\r\n\r\n",
+        [buf = std::move(buf), this, connection = std::move(connection)](std::error_code,
                                                         std::size_t len) {
             auto data = buf->data();
             buf->consume(len);
