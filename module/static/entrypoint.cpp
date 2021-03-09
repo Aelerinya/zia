@@ -9,7 +9,7 @@ namespace
 const zia::api::http::RouteEventDescriptor static_descriptor("static");
 }
 
-extern "C" std::unique_ptr<zia::api::IModule>
+ZIA_EXPORT_SYMBOL std::unique_ptr<zia::api::IModule>
 load_module(zia::api::IZiaInitializer &initializer)
 {
     auto static_module = std::make_unique<zia::Static>();

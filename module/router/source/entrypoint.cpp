@@ -6,7 +6,7 @@
 #include "router.hpp"
 #include "utils.hpp"
 
-extern "C" std::unique_ptr<zia::api::IModule>
+ZIA_EXPORT_SYMBOL std::unique_ptr<zia::api::IModule>
 load_module(zia::api::IZiaInitializer &initializer)
 {
     auto router = std::make_unique<zia::router::Router>();

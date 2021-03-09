@@ -21,7 +21,7 @@ void test::Module::configureModule([[maybe_unused]] const YAML::Node &config)
     std::clog << "Configuring test module" << std::endl;
 }
 
-extern "C" std::unique_ptr<api::IModule>
+ZIA_EXPORT_SYMBOL std::unique_ptr<api::IModule>
 load_module([[maybe_unused]] api::IZiaInitializer &initializer)
 {
     initializer.registerConsumer(

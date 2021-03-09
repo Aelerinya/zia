@@ -113,7 +113,7 @@ void zia::server::Server::onHTTPConnection(
         });
 }
 
-extern "C" std::unique_ptr<zia::api::IModule>
+ZIA_EXPORT_SYMBOL std::unique_ptr<zia::api::IModule>
 zia::api::load_module(zia::api::IZiaInitializer &init)
 {
     auto mod = std::make_unique<zia::server::Module>();

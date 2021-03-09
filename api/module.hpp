@@ -30,9 +30,15 @@ namespace std
 template class unique_ptr<zia::api::IModule>;
 }
 
+#ifdef WIN32
+#define ZIA_EXPORT_SYMBOL extern "C" __declspec(dllexport)
+#else
+#define ZIA_EXPORT_SYMBOL extern "C"
+#endif
+
 namespace zia::api
 {
-extern "C" std::unique_ptr<IModule> load_module(IZiaInitializer &);
+ZIA_EXPORT_SYMBOL std::unique_ptr<IModule> load_module(IZiaInitializer &);
 }    // namespace zia::api
 
 #endif
