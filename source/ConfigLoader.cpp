@@ -33,10 +33,18 @@ void ConfigLoader::reloadConfig()
     }
 
     m_current_config = YAML::LoadFile(m_config_file);
-    for (const auto module_config : m_current_config) {
+    const auto modules { m_current_config["modules"] };
+    m_current_config.remove("modules");
 
+    for (const auto module_config : m_current_config) {
         const auto module_name { module_config.first.as<std::string>() };
-        m_module_hub.loadModule(m_modules_dir / module_name);
+
+        const auto module_lib {
+            modules && modules[module_name] ?
+                modules[module_name].as<std::string>() : module_name
+        };
+
+        m_module_hub.loadModule(m_modules_dir / module_lib);
         const auto module { m_module_hub.getModule(module_name) };
 
         if (!module)
