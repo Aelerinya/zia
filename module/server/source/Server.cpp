@@ -3,7 +3,6 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 
-
 #include "Server.hpp"
 #include "api/internal/onstart.hpp"
 #include "connection.hpp"
@@ -74,8 +73,12 @@ void zia::server::Server::onHTTPResponse(
     for (const auto &[k, v]: rq.headers) {
         rp << k << ": " << v << "\r\n";
     }
-    rp << "\r\n";
-    rp << rq.body;
+
+    if (response->getRequestMethod() != zia::api::http::HTTPMethod::HEAD) {
+        rp << "\r\n";
+        rp << rq.body;
+    }
+
     boost::asio::async_write(
         response->getSocket(), boost::asio::buffer(rp.str(), rp.str().size()),
         [](std::error_code ec, std::size_t) {
@@ -93,8 +96,8 @@ void zia::server::Server::onHTTPConnection(
     auto &socket = connection->socket;
     boost::asio::async_read_until(
         socket, buf_ref, "\r\n\r\n",
-        [buf = std::move(buf), this, connection = std::move(connection)](std::error_code,
-                                                        std::size_t len) {
+        [buf = std::move(buf), this,
+         connection = std::move(connection)](std::error_code, std::size_t len) {
             auto data = buf->data();
             buf->consume(len);
             std::string s(boost::asio::buffers_begin(data), buffers_begin(data) + len);
