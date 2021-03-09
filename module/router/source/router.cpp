@@ -32,7 +32,7 @@ RouteRequestEvent::createResponse(const api::http::HTTPResponse &response)
 
 const std::string &Router::getName() const
 {
-    static const std::string name = "Router";
+    static const std::string name = "router";
     return name;
 }
 

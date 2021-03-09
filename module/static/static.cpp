@@ -18,22 +18,22 @@ api::http::HTTPResponse notFound(const api::http::HTTPRequest &request)
 }
 }    // namespace
 
-const std::string &StaticHandler::getName() const
+const std::string &Static::getName() const
 {
-    static const std::string name = "StaticHandler";
+    static const std::string name = "static";
     return name;
 }
 
-void StaticHandler::configureModule(const YAML::Node &config)
+void Static::configureModule(const YAML::Node &config)
 {
     m_base_directory = config["base_directory"].as<std::string>();
-    std::clog << "Static handler new base directory: " << m_base_directory.value()
+    std::clog << "Static module new base directory: " << m_base_directory.value()
               << std::endl;
 }
 
 api::http::HTTPResponse
-StaticHandler::handleRequest(const api::http::Route &route,
-                             const api::http::HTTPRequest &request)
+Static::handleRequest(const api::http::Route &route,
+                      const api::http::HTTPRequest &request)
 {
     if (!m_base_directory.has_value())
         return notFound(request);
@@ -47,7 +47,7 @@ StaticHandler::handleRequest(const api::http::Route &route,
     return {200, "OK", {}, oss.str()};
 }
 
-const std::optional<std::filesystem::path> &StaticHandler::getBaseDirectory() const
+const std::optional<std::filesystem::path> &Static::getBaseDirectory() const
 {
     return m_base_directory;
 }

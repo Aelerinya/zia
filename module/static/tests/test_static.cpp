@@ -6,10 +6,10 @@
 
 namespace fs = std::filesystem;
 
-BOOST_AUTO_TEST_CASE(test_static_handler)
+BOOST_AUTO_TEST_CASE(test_static)
 {
     fs::path tmp_dir = fs::temp_directory_path();
-    std::string tmp_file_name = "zia_static_handler_test_file";
+    std::string tmp_file_name = "zia_static_test_file";
     fs::path tmp_file_path = tmp_dir / tmp_file_name;
 
     std::ofstream f(tmp_file_path, std::ios_base::out | std::ios_base::trunc);
@@ -22,18 +22,18 @@ BOOST_AUTO_TEST_CASE(test_static_handler)
     YAML::Node config = YAML::Load("base_directory: " + tmp_dir.string());
     BOOST_TEST(config["base_directory"].as<std::string>() == tmp_dir.string());
 
-    zia::StaticHandler handler;
+    zia::Static module;
 
-    BOOST_TEST(!handler.getBaseDirectory().has_value());
-    handler.configureModule(config);
-    BOOST_TEST(handler.getBaseDirectory().value() == tmp_dir.string());
+    BOOST_TEST(!module.getBaseDirectory().has_value());
+    module.configureModule(config);
+    BOOST_TEST(module.getBaseDirectory().value() == tmp_dir.string());
 
 
     zia::api::http::Route route{tmp_file_name, {}};
     zia::api::http::HTTPRequest request{
         zia::api::http::HTTPMethod::GET, "/somewhere/" + tmp_file_name, {}, ""};
 
-    zia::api::http::HTTPResponse response = handler.handleRequest(route, request);
+    zia::api::http::HTTPResponse response = module.handleRequest(route, request);
     BOOST_TEST(response.status_code == 200);
     BOOST_TEST(response.status_message == "OK");
     BOOST_TEST(response.headers.size() == 0);
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(test_static_handler)
 
     // File not found
     route.path = "does_not_exist";
-    response = handler.handleRequest(route, request);
+    response = module.handleRequest(route, request);
     BOOST_TEST(response.status_code == 404);
     BOOST_TEST(response.status_message == "Not found");
     BOOST_TEST(response.headers.size() == 0);

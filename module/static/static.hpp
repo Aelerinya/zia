@@ -9,7 +9,7 @@
 
 namespace zia
 {
-class StaticHandler : public api::IModule
+class Static : public api::IModule
 {
 public:
     const std::string &getName() const override;

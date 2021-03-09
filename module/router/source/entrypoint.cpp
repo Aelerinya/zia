@@ -11,10 +11,10 @@ load_module(zia::api::IZiaInitializer &initializer)
 
     initializer.registerConsumer(
         zia::api::event_descriptor<zia::api::http::NewHTTPRequest>,
-        [&router](zia::api::IZiaMediator &mediator, std::unique_ptr<zia::api::IEvent> e) {
+        [&router = *router](zia::api::IZiaMediator &mediator, std::unique_ptr<zia::api::IEvent> e) {
             auto event = zia::dynamic_unique_ptr_cast<zia::api::http::NewHTTPRequest>(
                 std::move(e));
-            auto route_result = router->routeRequest(event->getRequest().route);
+            auto route_result = router.routeRequest(event->getRequest().route);
 
             if (!route_result.has_value()) {
                 zia::api::http::HTTPResponse not_found{404, "Not found", {}, ""};

@@ -107,25 +107,25 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
     auto mod = std::make_unique<zia::server::Module>();
     init.registerListener(
         zia::api::event_descriptor<zia::api::OnStartEvent>,
-        [&mod](zia::api::IZiaMediator &m, const IEvent &) { mod->start(m); });
+        [&mod = *mod](zia::api::IZiaMediator &m, const IEvent &) { mod.start(m); });
 
     init.registerConsumer(
         zia::api::event_descriptor<zia::api::http::NewHTTPResponse>,
-        [&mod](zia::api::IZiaMediator &, std::unique_ptr<IEvent> ev) {
+        [&mod = *mod](zia::api::IZiaMediator &, std::unique_ptr<IEvent> ev) {
             auto event =
                 zia::dynamic_unique_ptr_cast<zia::server::NewHTTPResponse>(std::move(ev));
-            auto server = mod->getServer();
+            auto server = mod.getServer();
             if (server.has_value())
                 server->get().onHTTPResponse(std::move(event));
         });
 
     init.registerConsumer(
         zia::api::event_descriptor<zia::api::http::NewHTTPConnectionEvent>,
-        [&mod](zia::api::IZiaMediator &, std::unique_ptr<IEvent> ev) {
+        [&mod = *mod](zia::api::IZiaMediator &, std::unique_ptr<IEvent> ev) {
             auto event =
                 zia::dynamic_unique_ptr_cast<zia::server::NewHTTPConnectionEvent>(
                     std::move(ev));
-            auto server = mod->getServer();
+            auto server = mod.getServer();
             if (server.has_value())
                 server->get().onHTTPConnection(std::move(event));
         });
