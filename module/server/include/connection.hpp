@@ -50,7 +50,7 @@ namespace zia::server
 {
 inline const api::EventDescriptor &NewHTTPSConnectionEvent::getDescriptor() const
 {
-    return api::event_descriptor<zia::server::NewHTTPConnectionEvent>;
+    return api::event_descriptor<zia::server::NewHTTPSConnectionEvent>;
 }
 
 class HTTPRequestParsed : public api::http::NewHTTPRequest
