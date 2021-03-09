@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:Ersikan/zia-api.git
 	branch = main
-	commit = dc449195889ecb595e3d7d767d82768015609b3a
-	parent = d77a7d4006937e410c645895621e412a2422a764
+	commit = 3cf5e38b1729715f2e06cc07400debd81cf9f34f
+	parent = 79dadcd33c245e7b50f06ed966f3683992418138
 	method = merge
-	cmdver = 0.4.3
+	cmdver = 0.4.1
