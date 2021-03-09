@@ -5,6 +5,7 @@
 #include "response.hpp"
 #include "utils.hpp"
 #include <iostream>
+#include <memory>
 #include <string>
 #include <yaml-cpp/yaml.h>
 
@@ -21,11 +22,14 @@ void zia::server::Module::configureModule(const YAML::Node &node)
     if (node["http"])
         this->http_port = node["http"].as<short>(80);
     if (node["https"])
-        this->http_port = node["https"].as<short>(443);
+        this->https_port = node["https"].as<short>(443);
 }
 
 void zia::server::Module::start(zia::api::IZiaMediator &mediator)
 {
+    std::clog << "Starting server ..." << std::endl;
+    std::clog << "http port " << this->http_port << std::endl;
+    std::clog << "https port " << this->https_port << std::endl;
     this->server.emplace(mediator, this->http_port, this->https_port);
 }
 
@@ -83,11 +87,13 @@ void zia::server::Server::onHTTPConnection(
     std::unique_ptr<zia::server::NewHTTPConnectionEvent> connection)
 {
 
-    boost::asio::streambuf buf;
+    auto buf = std::make_shared<boost::asio::streambuf>();
     boost::asio::async_read_until(
-        connection->socket, buf, "\r\n\r\n", [&](std::error_code, std::size_t len) {
-            auto data = buf.data();
-            buf.consume(len);
+        connection->socket, *buf, "\r\n\r\n",
+        [buf, this, connection = std::move(connection)](std::error_code,
+                                                        std::size_t len) {
+            auto data = buf->data();
+            buf->consume(len);
             std::string s(boost::asio::buffers_begin(data), buffers_begin(data) + len);
             auto i = this->parser.parse(s);
             boost::asio::async_read(connection->socket, boost::asio::buffer(i.body),
