@@ -43,6 +43,9 @@ api::http::HTTPResponse Static::handleRequest(const api::http::Route &route,
     if (!f)
         return notFound(request);
 
+    if (request.method == api::http::HTTPMethod::HEAD)
+        return {200, "OK", {}, {}};
+
     std::ostringstream oss;
     oss << f.rdbuf();
     return {200, "OK", {}, oss.str()};
