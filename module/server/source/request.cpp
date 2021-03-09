@@ -18,5 +18,6 @@ const zia::api::http::HTTPRequest &NewHTTPRequest::getRequest()
 std::unique_ptr<zia::api::IEvent>
 NewHTTPRequest::createResponse(const api::http::HTTPResponse &response)
 {
-    return std::make_unique<NewHTTPResponse>(response, std::move(m_socket));
+    return std::make_unique<NewHTTPResponse>(this->m_request.method, response,
+                                             std::move(m_socket));
 }
