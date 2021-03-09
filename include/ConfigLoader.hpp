@@ -7,18 +7,18 @@
 
 namespace zia {
 
-
-struct ReloadConfig;
-
-template <>
-constexpr api::EventDescriptor api::event_descriptor<ReloadConfig> {"ReloadConfig"};
-
 struct ReloadConfig : api::IEvent {
-    const api::EventDescriptor& getDescriptor() const override final {
-        return api::event_descriptor<ReloadConfig>;
-    }
+    const api::EventDescriptor& getDescriptor() const override final;
 };
 
+namespace api {
+template <>
+constexpr EventDescriptor event_descriptor<ReloadConfig> = {"ReloadConfig"};
+}
+
+inline const api::EventDescriptor& ReloadConfig::getDescriptor() const {
+        return api::event_descriptor<ReloadConfig>;
+}
 
 class ConfigLoader {
 
