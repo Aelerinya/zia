@@ -1,0 +1,15 @@
+modules:
+  server: ziaserver
+  router: ziarouter
+  static: ziastatic
+
+server:
+  http: 8080
+  https: 4200
+
+router:
+  /static:
+    handler: static
+
+static:
+  base_directory: ./static
