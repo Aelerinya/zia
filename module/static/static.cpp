@@ -14,7 +14,7 @@ api::http::HTTPResponse notFound(const api::http::HTTPRequest &request)
     return {404,
             "Not found",
             {},
-            "Ressource " + request.route + "was not found on this server"};
+            "Ressource " + request.route + " was not found on this server"};
 }
 }    // namespace
 
@@ -31,14 +31,15 @@ void Static::configureModule(const YAML::Node &config)
               << std::endl;
 }
 
-api::http::HTTPResponse
-Static::handleRequest(const api::http::Route &route,
-                      const api::http::HTTPRequest &request)
+api::http::HTTPResponse Static::handleRequest(const api::http::Route &route,
+                                              const api::http::HTTPRequest &request)
 {
     if (!m_base_directory.has_value())
         return notFound(request);
 
-    std::ifstream f(m_base_directory.value() / route.path);
+    auto path =
+        m_base_directory.value() / std::filesystem::path(route.path).relative_path();
+    std::ifstream f(path);
     if (!f)
         return notFound(request);
 
