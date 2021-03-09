@@ -7,6 +7,10 @@
 #include "../event.hpp"
 #include "response.hpp"
 
+#ifdef WIN32
+#undef DELETE
+#endif
+
 namespace zia::api::http
 {
 enum class HTTPMethod { GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH };
