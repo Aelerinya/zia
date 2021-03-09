@@ -70,36 +70,39 @@ auto ModuleHub::getEventConsumer(const api::EventDescriptor& event) const
 {
     using namespace std::views;
 
-    const auto consumers {
+    const auto consumerss {
         m_modules | values | transform(
             [](const auto& module) -> const auto& { return module.registrations.consumers; }
-        ) | join
-    };
-
-    const auto consumer {
-        std::ranges::find_if(consumers,
-            [&](const auto& consumer) { return consumer.first == event; }
         )
     };
 
-    if (consumer == consumers.end()) return {};
-    return (*consumer).second;
+    for (const auto& consumers : consumerss)
+        for (const auto& consumer : consumers)
+            if (consumer.first == event)
+                return consumer.second;
+
+    return {};
 }
 
 auto ModuleHub::getEventListeners(const api::EventDescriptor& event) const
     -> std::vector<std::reference_wrapper<const api::EventListener>>
 {
+    std::vector<std::reference_wrapper<const api::EventListener>> event_listeners;
+
     using namespace std::views;
 
-    auto listeners {
+    auto listenerss {
         m_modules | values | transform(
             [](const auto& module) -> const auto& { return module.registrations.listeners; }
-        ) | join | filter(
-            [&](const auto& listener) { return listener.first == event; }
-        ) | values | common
+        )
     };
 
-    return { listeners.begin(), listeners.end() };
+    for (const auto& listeners : listenerss)
+        for (const auto& listener : listeners)
+            if (listener.first == event)
+                event_listeners.emplace_back(listener.second);
+
+    return event_listeners;
 }
 
 
