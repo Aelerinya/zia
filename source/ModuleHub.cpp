@@ -13,6 +13,7 @@ void ModuleHub::loadModule(const std::filesystem::path& path)
             const api::EventDescriptor& event,
             api::EventConsumer consumer
         ) override {
+            std::clog << "Registering consumer for event '" << event.name << "'\n";
             consumers.emplace(event, std::move(consumer));
         }
 
@@ -20,12 +21,14 @@ void ModuleHub::loadModule(const std::filesystem::path& path)
             const api::EventDescriptor& event,
             api::EventListener listener
         ) override {
+            std::clog << "Registering listener for event '" << event.name << "'\n";
             listeners.emplace(event, std::move(listener));
         }
 
     } initializer;
 
 
+    std::clog << "Loading module '" << path.filename().string() << "'\n";
     ModuleProxy proxy { path, initializer };
     const auto& name { proxy.getName() };
 
@@ -46,6 +49,7 @@ void ModuleHub::loadModule(const std::filesystem::path& path)
 
 void ModuleHub::unloadModule(ModuleName name)
 {
+    std::clog << "Unloading module '" << name << "'\n";
     if (m_modules.erase(name) == 0) {
         std::cerr << "ERROR: cannot unload '" << name << "', module not found.\n";
     }
