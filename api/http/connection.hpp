@@ -13,14 +13,6 @@ namespace zia::api::http
 class NewHTTPConnectionEvent : public IEvent
 {
 public:
-    NewHTTPConnectionEvent(boost::asio::io_context &ic, boost::asio::ip::tcp::socket s)
-        : IEvent(), socket(std::move(s)), context(ic)
-    {
-    }
-    // static inline const EventDescriptor event =
-    // event_base<NewConnectionEvent, NewConnectionEvent::event_name>;
-    boost::asio::ip::tcp::socket socket;
-    std::reference_wrapper<boost::asio::io_context> context;
     const EventDescriptor &getDescriptor() const final;
 };
 

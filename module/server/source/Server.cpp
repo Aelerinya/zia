@@ -110,7 +110,7 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
         [&mod](zia::api::IZiaMediator &m, const IEvent &) { mod->start(m); });
 
     init.registerConsumer(
-        zia::api::event_descriptor<zia::server::NewHTTPResponse>,
+        zia::api::event_descriptor<zia::api::http::NewHTTPResponse>,
         [&mod](zia::api::IZiaMediator &, std::unique_ptr<IEvent> ev) {
             auto event =
                 zia::dynamic_unique_ptr_cast<zia::server::NewHTTPResponse>(std::move(ev));
@@ -120,7 +120,7 @@ zia::api::load_module(zia::api::IZiaInitializer &init)
         });
 
     init.registerConsumer(
-        zia::api::event_descriptor<zia::server::NewHTTPConnectionEvent>,
+        zia::api::event_descriptor<zia::api::http::NewHTTPConnectionEvent>,
         [&mod](zia::api::IZiaMediator &, std::unique_ptr<IEvent> ev) {
             auto event =
                 zia::dynamic_unique_ptr_cast<zia::server::NewHTTPConnectionEvent>(

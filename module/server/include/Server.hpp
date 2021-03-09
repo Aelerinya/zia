@@ -1,7 +1,7 @@
 #include "HTTPParser.hpp"
 #include "api/module.hpp"
-#include "response.hpp"
 #include "connection.hpp"
+#include "response.hpp"
 #include <boost/asio.hpp>
 
 namespace zia::server
@@ -18,7 +18,8 @@ public:
     api::IZiaMediator &mediator;
 
     void onHTTPResponse(std::unique_ptr<zia::server::NewHTTPResponse> response);
-    void onHTTPConnection(std::unique_ptr<zia::server::NewHTTPConnectionEvent> connection);
+    void
+    onHTTPConnection(std::unique_ptr<zia::server::NewHTTPConnectionEvent> connection);
 
 private:
     std::thread context_thread;
