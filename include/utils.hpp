@@ -33,7 +33,7 @@ std::unique_ptr<Derived> dynamic_unique_ptr_cast(std::unique_ptr<Base> &&p)
         p.release();
         return std::unique_ptr<Derived>(result);
     }
-    return std::unique_ptr<Derived>(nullptr);
+    throw std::runtime_error("Could not dynamic cast unique_ptr");
 }
 // template <typename Derived, typename Base, typename Del>
 // std::unique_ptr<Derived, Del> dynamic_unique_ptr_cast(std::unique_ptr<Base, Del> &&p)
