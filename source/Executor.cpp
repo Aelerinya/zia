@@ -100,6 +100,8 @@ void Executor::reloadConfig()
 
     m_config_loader.reloadConfig();
 
+    m_event_queue.push(std::make_unique<zia::api::OnStartEvent>());
+
     // FIXME: Use RAII to stop the queue
     m_event_queue.setStop(false);
 }
