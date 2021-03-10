@@ -21,6 +21,8 @@ void Module::start(api::IZiaMediator &mediator)
 {
     std::clog << "Launching prompt..." << std::endl;
 
+    std::cin.sync_with_stdio(false);
+
     m_prompt_thread = std::jthread {
         [&](std::stop_token stopped) {
             while (!stopped.stop_requested()) {
