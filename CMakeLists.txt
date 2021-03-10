@@ -18,7 +18,12 @@ include_directories(include)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-add_compile_definitions(WIN32_LEAN_AND_MEAN)
+
+if (WIN32) # Avoid double inclusion and remove useless warnings on Windows
+  add_compile_options(/wd4190 /FIsdkddkver.h /experimental:external
+    /external:anglebrackets /external:W0 /external:templates-)
+  add_compile_definitions(WIN32_LEAN_AND_MEAN)
+endif()
 
 enable_testing()
 
