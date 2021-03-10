@@ -2,6 +2,7 @@ modules:
   server: ziaserver
   router: ziarouter
   static: ziastatic
+  prompt: ziaprompt
 
 server:
   http: 8080
@@ -16,3 +17,5 @@ static:
   default:
     - index.html
     - index.php
+
+prompt:
