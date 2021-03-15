@@ -3,6 +3,7 @@
 #include "Executor.hpp"
 #include "ModuleHub.hpp"
 #include "ConfigLoader.hpp"
+#include "ConfigLoader.hpp"
 #include "TestDisplay.hpp"
 #include "api/internal/onstart.hpp"
 #include "module/test/test_module.hpp"
@@ -10,11 +11,12 @@
 BOOST_AUTO_TEST_CASE(test_Executor)
 {
     zia::ModuleHub hub;
+    zia::ConfigLoader config {hub};
 
     hub.loadModule("lib/testmodule");
     BOOST_TEST(hub.getModule("TestModule").has_value());
 
-    zia::Executor executor(hub, *reinterpret_cast<zia::ConfigLoader*>(&hub));
+    zia::Executor executor(hub, config);
 
     std::clog << "Executing start event" << std::endl;
     executor.handleEvent(std::make_unique<zia::api::OnStartEvent>());

@@ -23,6 +23,7 @@ inline const api::EventDescriptor& ReloadConfig::getDescriptor() const {
 class ConfigLoader {
 
 public:
+    ConfigLoader(ModuleHub &hub) : m_module_hub(hub) {};
     explicit ConfigLoader(
         std::filesystem::path config_file,
         std::filesystem::path modules_dir,
