@@ -9,7 +9,7 @@ server:
   https: 4200
 
 router:
-  /static:
+  /:
     handler: static
 
 static:

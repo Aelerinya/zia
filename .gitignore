@@ -18,6 +18,7 @@ Makefile
 
 # Ignore the build directory
 build/
+release
 cmake-build-*
 
 # Ignore JetBrains IDE files
@@ -29,3 +30,6 @@ doc
 # Run scripts
 run.bat
 run.sh
+
+# Ignore static directory
+static
